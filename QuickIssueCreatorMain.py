@@ -60,6 +60,27 @@ class QIC_Main_UI:
         self.tested_HW_text.insert(END, "hw used for testing")
         self.tested_HW_text.grid(row = 2, column = 3)
 
+        self.create_issue_button = Button(master, text = "Create issue", command = self.create_issue_method)
+        self.create_issue_button.grid(row = 10)
+    
+    #This method will initialize the UI and workflow to create an issues
+    def create_issue_method(self):
+        create_issue_window = Toplevel()
+        create_issue_window.title("Create issue")
+
+        #define the button from the create issue screen that will save and close the window
+        save_close_issue_button = Button(create_issue_window, text = "Save & Close", command = lambda: self.save_issue_method(create_issue_window))
+        save_close_issue_button.grid(row = 5)
+
+        #define the button that will discard the create issue screen and data from it
+        save_close_issue_button = Button(create_issue_window, text = "Discard & Close")
+        save_close_issue_button.grid(row = 5, column = 1)
+
+    #This method will handle the Save & Close button event
+    def save_issue_method(self, ciw):
+        print(ciw)
+        ciw.destroy
+
     #this function defines what happens when a project is selected from project Optionmenu
     def project_option_function(self, value):
         print value
