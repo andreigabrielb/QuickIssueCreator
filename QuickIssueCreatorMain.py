@@ -17,13 +17,9 @@ class QIC_Main_UI:
         #this is the init method for the UI 
         self.master = master
         master.title("Quick Issue creator")
-
+        
         #define the created issues index variable
         self.issue_index = 0
-
-        #Application close button initialization 
-        self.close_app_button = Button(master, text = "Close application", command = master.quit)
-        self.close_app_button.grid(row = 10, column = 5)
 
         #Project defintion label and text field
         self.project_label = Label(master, text = "Project: ")
@@ -60,8 +56,21 @@ class QIC_Main_UI:
         self.tested_HW_text.insert(END, "hw used for testing")
         self.tested_HW_text.grid(row = 2, column = 3)
 
+        #label and text box for the file name that will contain the issues
+        self.issue_file_name_label = Label(master, text = "Name of issues file: ")
+        self.issue_file_name_label.grid(row = 3)
+
+        self.issue_file_name_text = Text(master, height = 1, width = 30)
+        self.issue_file_name_text.insert(END, "File_name.txt")
+        self.issue_file_name_text.grid(row = 3, column = 1)
+
+        #button that will call a Toplevel UI to create a new issue
         self.create_issue_button = Button(master, text = "Create issue", command = self.create_issue_method)
         self.create_issue_button.grid(row = 10)
+
+         #Application close button initialization 
+        self.close_app_button = Button(master, text = "Close application", command = master.quit)
+        self.close_app_button.grid(row = 10, column = 5)
     
     #This method will initialize the UI and workflow to create an issues
     def create_issue_method(self):
