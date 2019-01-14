@@ -68,12 +68,28 @@ class QIC_Main_UI:
         create_issue_window = Toplevel()
         create_issue_window.title("Create issue")
 
-        #define the button from the create issue screen that will save and close the window
+        #issue summary label and text field
+        issue_summary_label = Label(create_issue_window, text = "Summary")
+        issue_summary_label.grid(row = 1)
+
+        issue_summary_text = Text(create_issue_window, height = 1, width = 50)
+        issue_summary_text.insert(END, "Write issue summary here")
+        issue_summary_text.grid(row = 1, column = 1)
+
+        #create issue description label and text field
+        issue_description_label = Label(create_issue_window, text = "Summary")
+        issue_description_label.grid(row = 2)
+
+        issue_description_text = Text(create_issue_window, height = 5, width = 50)
+        issue_description_text.insert(END, "Write issue description here")
+        issue_description_text.grid(row = 2, column = 1)
+
+        #define the button that will save a created issue
         save_close_issue_button = Button(create_issue_window, text = "Save & Close", command = lambda: self.save_issue_method(create_issue_window))
         save_close_issue_button.grid(row = 5)
 
-        #define the button that will discard the create issue screen and data from it
-        save_close_issue_button = Button(create_issue_window, text = "Discard & Close")
+        #define the button that will discard an issue and close the window
+        save_close_issue_button = Button(create_issue_window, text = "Close", command = create_issue_window.destroy)
         save_close_issue_button.grid(row = 5, column = 1)
 
     #This method will handle the Save & Close button event
