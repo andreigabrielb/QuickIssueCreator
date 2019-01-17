@@ -10,6 +10,7 @@ from Tkinter import StringVar
 from Tkinter import Text
 from Tkinter import END
 from tkFileDialog import askopenfilename
+import datetime
 
 #This class will create the main application UI as an object with all of the buttons it requires
 class QIC_Main_UI:
@@ -77,7 +78,7 @@ class QIC_Main_UI:
         self.load_issues_file_button.grid(row = 3, column = 3)
 
         #button that will call a Toplevel UI to create a new issue
-        self.create_issue_button = Button(master, text = "Create issue", command = lambda: self.create_issue_method())
+        self.create_issue_button = Button(master, text = "Create issue", command = lambda: self.create_issue_UI())
         self.create_issue_button.grid(row = 10)
 
         #Application close button initialization 
@@ -85,7 +86,7 @@ class QIC_Main_UI:
         self.close_app_button.grid(row = 10, column = 5)
     
     #This method will initialize the UI and workflow to create an issues
-    def create_issue_method(self):
+    def create_issue_UI(self):
         create_issue_window = Toplevel()
         create_issue_window.title("Create issue")
 
@@ -104,6 +105,17 @@ class QIC_Main_UI:
         issue_description_text = Text(create_issue_window, height = 5, width = 50)
         issue_description_text.insert(END, "Write issue description here")
         issue_description_text.grid(row = 2, column = 1)
+
+        #Get the time stamps for the created issue
+        now = datetime.datetime.now()
+        issue_datetime_text = Text(create_issue_window, height = 1, width = 30)
+        issue_datetime_text.insert(END, str(now))
+        issue_datetime_text.grid(row = 3)
+
+        #Get GPS coordinates (This will be done later)
+        issue_GPS_text = Text(create_issue_window, height = 1, width = 30)
+        issue_GPS_text.insert(END, "Get GPS coordinates somehow")
+        issue_GPS_text.grid(row = 3, column = 1)
 
         #define the button that will save a created issue
         save_close_issue_button = Button(create_issue_window, text = "Save", command = lambda: self.save_issue_method(create_issue_window))
