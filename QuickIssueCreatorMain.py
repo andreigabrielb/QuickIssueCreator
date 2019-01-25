@@ -11,6 +11,7 @@ from Tkinter import Text
 from Tkinter import END
 from tkFileDialog import askopenfilename
 import datetime
+import geocoder
 
 #This class will create the main application UI as an object with all of the buttons it requires
 class QIC_Main_UI:
@@ -112,9 +113,14 @@ class QIC_Main_UI:
         issue_datetime_text.insert(END, str(now))
         issue_datetime_text.grid(row = 3)
 
+        #Get GPS coordinates from the system
+        g = geocoder.ip('me')
+        print(g.latlng)
+        GPScoord = str(g.latlng)
+
         #Get GPS coordinates (This will be done later)
         issue_GPS_text = Text(create_issue_window, height = 1, width = 30)
-        issue_GPS_text.insert(END, "Get GPS coordinates somehow")
+        issue_GPS_text.insert(END, GPScoord)
         issue_GPS_text.grid(row = 3, column = 1)
 
         #define the button that will save a created issue
