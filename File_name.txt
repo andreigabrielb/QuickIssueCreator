@@ -1,1 +1,1 @@
-This is a test file
+Issue ID ||| Time&Date ||| Summary ||| Description ||| GPS coordinates ||| Project ||| project version ||| HW ||| Tester

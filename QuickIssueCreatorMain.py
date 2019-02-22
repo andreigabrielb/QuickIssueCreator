@@ -88,30 +88,30 @@ class QIC_Main_UI:
     
     #This method will initialize the UI and workflow to create an issues
     def create_issue_UI(self):
-        create_issue_window = Toplevel()
-        create_issue_window.title("Create issue")
+        self.create_issue_window = Toplevel()
+        self.create_issue_window.title("Create issue")
 
         #issue summary label and text field
-        issue_summary_label = Label(create_issue_window, text = "Summary")
-        issue_summary_label.grid(row = 1)
+        self.issue_summary_label = Label(self.create_issue_window, text = "Summary")
+        self.issue_summary_label.grid(row = 1)
 
-        issue_summary_text = Text(create_issue_window, height = 1, width = 50)
-        issue_summary_text.insert(END, "Write issue summary here")
-        issue_summary_text.grid(row = 1, column = 1)
+        self.issue_summary_text = Text(self.create_issue_window, height = 1, width = 50)
+        self.issue_summary_text.insert(END, "Write issue summary here")
+        self.issue_summary_text.grid(row = 1, column = 1)
 
         #create issue description label and text field
-        issue_description_label = Label(create_issue_window, text = "Summary")
-        issue_description_label.grid(row = 2)
+        self.issue_description_label = Label(self.create_issue_window, text = "Summary")
+        self.issue_description_label.grid(row = 2)
 
-        issue_description_text = Text(create_issue_window, height = 5, width = 50)
-        issue_description_text.insert(END, "Write issue description here")
-        issue_description_text.grid(row = 2, column = 1)
+        self.issue_description_text = Text(self.create_issue_window, height = 5, width = 50)
+        self.issue_description_text.insert(END, "Write issue description here")
+        self.issue_description_text.grid(row = 2, column = 1)
 
         #Get the time stamps for the created issue
         now = datetime.datetime.now()
-        issue_datetime_text = Text(create_issue_window, height = 1, width = 30)
-        issue_datetime_text.insert(END, str(now))
-        issue_datetime_text.grid(row = 3)
+        self.issue_datetime_text = Text(self.create_issue_window, height = 1, width = 30)
+        self.issue_datetime_text.insert(END, str(now))
+        self.issue_datetime_text.grid(row = 3)
 
         #Get GPS coordinates from the system
         g = geocoder.ip('me')
@@ -119,22 +119,36 @@ class QIC_Main_UI:
         GPScoord = str(g.latlng)
 
         #Get GPS coordinates (This will be done later)
-        issue_GPS_text = Text(create_issue_window, height = 1, width = 30)
-        issue_GPS_text.insert(END, GPScoord)
-        issue_GPS_text.grid(row = 3, column = 1)
+        self.issue_GPS_text = Text(self.create_issue_window, height = 1, width = 30)
+        self.issue_GPS_text.insert(END, GPScoord)
+        self.issue_GPS_text.grid(row = 3, column = 1)
 
         #define the button that will save a created issue
-        save_close_issue_button = Button(create_issue_window, text = "Save", command = lambda: self.save_issue_method(create_issue_window))
-        save_close_issue_button.grid(row = 5)
+        self.save_close_issue_button = Button(self.create_issue_window, text = "Save", command = lambda: self.save_issue_method())
+        self.save_close_issue_button.grid(row = 5)
 
         #define the button that will discard an issue and close the window
-        save_close_issue_button = Button(create_issue_window, text = "Close", command = create_issue_window.destroy)
-        save_close_issue_button.grid(row = 5, column = 1)
+        self.save_close_issue_button = Button(self.create_issue_window, text = "Close", command = self.create_issue_window.destroy)
+        self.save_close_issue_button.grid(row = 5, column = 1)
 
-    #This method will handle the Save & Close button event
-    def save_issue_method(self, ciw):
-        print(ciw)
-        ciw.destroy
+    #This method will save the current data as an new line in the 
+    def save_issue_method(self):
+        #open file for appending a new new issue at the end
+        f = open(self.issue_file_name, "a")
+
+        test = self.issue_datetime_text("1.0", "end-1c")
+        # Write the "Issue ID ||| Time&Date ||| Summary ||| Description ||| GPS coordinates ||| Project ||| project version ||| HW ||| Tester" values in the file
+        f.write("%d ||| %s ||| %s ||| %s ||| %s ||| %s ||| %s ||| %s ||| %s" %(1233, 
+                                                                               test, 
+                                                                               self.issue_summary_text("1.0", "end-1c"), 
+                                                                               self.issue_description_text("1.0", "end-1c"), 
+                                                                               self.issue_GPS_text("1.0", "end-1c"), 
+                                                                               self.projectVar(), 
+                                                                               self.project_version_text.get("1.0", "end-1c"),
+                                                                               self.tested_HW_text.get("1.0", "end-1c"),
+                                                                               self.tester_name_text.get("1.0", "end-1c")
+                                                                               ))
+        f.close()
 
     #this function defines what happens when a project is selected from project Optionmenu
     def project_option_function(self, value):
@@ -152,7 +166,7 @@ class QIC_Main_UI:
         else:
             self.issue_file_name = name
             f = open(self.issue_file_name, "w+")
-            f.write("This is a test file")
+            f.write("Issue ID ||| Time&Date ||| Summary ||| Description ||| GPS coordinates ||| Project ||| project version ||| HW ||| Tester")
             f.close()
             self.message_box_notification("File %s created" % self.issue_file_name)
 
