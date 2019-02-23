@@ -22,7 +22,7 @@ class QIC_Main_UI:
         master.title("Quick Issue creator")
         
         #define the created issues index variable
-        self.issue_index = 0
+        self.issue_index = 123
 
         #ser the value of the issue_file_name under use to ""
         self.issue_file_name = ''
@@ -85,9 +85,74 @@ class QIC_Main_UI:
         #Application close button initialization 
         self.close_app_button = Button(master, text = "Close application", command = master.quit)
         self.close_app_button.grid(row = 10, column = 5)
-    
-    #This method will initialize the UI and workflow to create an issues
+
+    #this function defines what happens when a project is selected from project Option menu
+    def project_option_function(self, value):
+        print value
+        print self.project_version_text.get("1.0", "end-1c")
+        print self.tester_name_text.get("1.0", "end-1c")
+        print self.tested_HW_text.get("1.0", "end-1c")
+
+    #this method will create a new file with the received namea and make that the active file name under use
+    def create_new_issue_file(self, name):
+        #Assign the value from the issue_file_name_text to the issue_file_name object variable as the active file under use
+        if name == '':
+            print"no file name"
+            self.message_box_notification("No file name given.")
+        else:
+            self.issue_file_name = name
+            f = open(self.issue_file_name, "w+")
+            f.write("Issue ID ||| Time&Date ||| Summary ||| Description ||| GPS coordinates ||| Project ||| project version ||| HW ||| Tester \n")
+            f.close()
+            self.message_box_notification("File %s created" % self.issue_file_name)
+
+    # this method will load an existng issue file as the issue file under use
+    def load_issue_file(self):
+        #This function will load a file and assign it to the appropriate object variable
+        self.issue_file_name = askopenfilename(initialdir = "/",title = "Select file",filetypes = (("text files","*.txt"),("all files","*.*")))
+        self.message_box_notification("File %s loaded" % self.issue_file_name)
+
+    # this method will create a message box and print the passed text
+    def message_box_notification(self, txt):
+        #crate the top level for message box
+        mess_box = Toplevel()
+        mess_box.title("Message")
+        #create the message text
+        msg = Message(mess_box, text = txt)
+        msg.pack()
+        #create top level close button
+        mess_box_close = Button(mess_box, text = "OK", command = mess_box.destroy)
+        mess_box_close.pack()
+
+    #This method calls the CreateIssueUI class and passes over all the needed project variable 
     def create_issue_UI(self):
+        
+        # i need to find a way to get this value
+        #print self.projectVar
+
+        CreateIssueUI(self.issue_file_name, self.issue_index, "Ford", self.project_version_text.get("1.0", "end-1c"), self.tested_HW_text.get("1.0", "end-1c"), self.tester_name_text.get("1.0", "end-1c"))
+
+class CreateIssueUI:
+
+    #This method will initialize the UI and workflow to create an issues
+    def __init__(self, ifn, iid, pv, pvt, tht, tnt):
+
+        #create a dictionaty to hold all of the issue data 
+        self.issue_dictionary = {
+                                "file name" : ifn,
+                                "issue index" : iid,
+                                "project name" : pv,
+                                "project version" : pvt,
+                                "HW setup" : tht,
+                                "tester" : tnt, 
+                                "issue summary" : "summary",
+                                "issue description" : "description",
+                                "issue time" : "time",
+                                "issue GPS" : "GPS"
+                            }
+
+        
+        #create the Top level that will be the create issue main window 
         self.create_issue_window = Toplevel()
         self.create_issue_window.title("Create issue")
 
@@ -124,7 +189,7 @@ class QIC_Main_UI:
         self.issue_GPS_text.grid(row = 3, column = 1)
 
         #define the button that will save a created issue
-        self.save_close_issue_button = Button(self.create_issue_window, text = "Save", command = lambda: self.save_issue_method())
+        self.save_close_issue_button = Button(self.create_issue_window, text = "Save", command = lambda: self.save_issue_method(self.issue_dictionary))
         self.save_close_issue_button.grid(row = 5)
 
         #define the button that will discard an issue and close the window
@@ -132,61 +197,30 @@ class QIC_Main_UI:
         self.save_close_issue_button.grid(row = 5, column = 1)
 
     #This method will save the current data as an new line in the 
-    def save_issue_method(self):
-        #open file for appending a new new issue at the end
-        f = open(self.issue_file_name, "a")
+    def save_issue_method(self, issue_dict):
 
-        test = self.issue_datetime_text("1.0", "end-1c")
+        #set the latest issue values to the dictionary
+        issue_dict["issue time"] = self.issue_datetime_text.get("1.0", "end-1c")
+        issue_dict["issue summary"] = self.issue_summary_text.get("1.0", "end-1c")
+        issue_dict["issue description"] = self.issue_description_text.get("1.0", "end-1c")
+        issue_dict["issue GPS"] = self.issue_GPS_text.get("1.0", "end-1c")
+
+        #open file for appending a new new issue at the end
+        f = open(issue_dict["file name"], "a")
+
         # Write the "Issue ID ||| Time&Date ||| Summary ||| Description ||| GPS coordinates ||| Project ||| project version ||| HW ||| Tester" values in the file
-        f.write("%d ||| %s ||| %s ||| %s ||| %s ||| %s ||| %s ||| %s ||| %s" %(1233, 
-                                                                               test, 
-                                                                               self.issue_summary_text("1.0", "end-1c"), 
-                                                                               self.issue_description_text("1.0", "end-1c"), 
-                                                                               self.issue_GPS_text("1.0", "end-1c"), 
-                                                                               self.projectVar(), 
-                                                                               self.project_version_text.get("1.0", "end-1c"),
-                                                                               self.tested_HW_text.get("1.0", "end-1c"),
-                                                                               self.tester_name_text.get("1.0", "end-1c")
+        f.write("%d ||| %s ||| %s ||| %s ||| %s ||| %s ||| %s ||| %s ||| %s \n" %(issue_dict["issue index"], 
+                                                                               issue_dict["issue time"], 
+                                                                               issue_dict["issue summary"],
+                                                                               issue_dict["issue description"], 
+                                                                               issue_dict["issue GPS"],
+                                                                               issue_dict["project name"],
+                                                                               issue_dict["project version"],
+                                                                               issue_dict["HW setup"],
+                                                                               issue_dict["tester"]
                                                                                ))
         f.close()
-
-    #this function defines what happens when a project is selected from project Optionmenu
-    def project_option_function(self, value):
-        print value
-        print self.project_version_text.get("1.0", "end-1c")
-        print self.tester_name_text.get("1.0", "end-1c")
-        print self.tested_HW_text.get("1.0", "end-1c")
-
-    #this method will create a new file with the received namea and make that the active file name under use
-    def create_new_issue_file(self, name):
-        #Assign the value from the issue_file_name_text to the issue_file_name object variable as the active file under use
-        if name == '':
-            print"no file name"
-            self.message_box_notification("No file name given.")
-        else:
-            self.issue_file_name = name
-            f = open(self.issue_file_name, "w+")
-            f.write("Issue ID ||| Time&Date ||| Summary ||| Description ||| GPS coordinates ||| Project ||| project version ||| HW ||| Tester")
-            f.close()
-            self.message_box_notification("File %s created" % self.issue_file_name)
-
-    # this method will load an existng issue file as the issue file under use
-    def load_issue_file(self):
-        #This function will load a file and assign it to the appropriate object variable
-        self.issue_file_name = askopenfilename(initialdir = "/",title = "Select file",filetypes = (("text files","*.txt"),("all files","*.*")))
-        self.message_box_notification("File %s loaded" % self.issue_file_name)
-
-    # this method will create a message box and print the passed text
-    def message_box_notification(self, txt):
-        #crate the top level for message box
-        mess_box = Toplevel()
-        mess_box.title("Message")
-        #create the message text
-        msg = Message(mess_box, text = txt)
-        msg.pack()
-        #create top level close button
-        mess_box_close = Button(mess_box, text = "OK", command = mess_box.destroy)
-        mess_box_close.pack()
+        self.create_issue_window.destroy()
 
 #initialization of the application
 if __name__ == "__main__":
