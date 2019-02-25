@@ -97,7 +97,6 @@ class QIC_Main_UI:
     def create_new_issue_file(self, name):
         #Assign the value from the issue_file_name_text to the issue_file_name object variable as the active file under use
         if name == '':
-            print"no file name"
             self.message_box_notification("No file name given.")
         else:
             self.issue_file_name = name
@@ -127,10 +126,17 @@ class QIC_Main_UI:
     #This method calls the CreateIssueUI class and passes over all the needed project variable 
     def create_issue_UI(self):
         
-        # i need to find a way to get this value
-        #print self.projectVar
-
-        CreateIssueUI(self.issue_file_name, self.issue_index, "Ford", self.project_version_text.get("1.0", "end-1c"), self.tested_HW_text.get("1.0", "end-1c"), self.tester_name_text.get("1.0", "end-1c"))
+        #check if a file to save the issue has been set
+        if self.issue_file_name == '':
+            self.message_box_notification("No file selected to save the new issue!")
+        else:
+            #call the class that creates a new issue 
+            CreateIssueUI(self.issue_file_name, 
+                          self.issue_index, "Ford", 
+                          self.project_version_text.get("1.0", "end-1c"), 
+                          self.tested_HW_text.get("1.0", "end-1c"), 
+                          self.tester_name_text.get("1.0", "end-1c")
+                      )
 
 class CreateIssueUI:
 

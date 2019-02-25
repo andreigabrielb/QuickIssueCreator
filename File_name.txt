@@ -1,3 +1,1 @@
 Issue ID ||| Time&Date ||| Summary ||| Description ||| GPS coordinates ||| Project ||| project version ||| HW ||| Tester 
-123 ||| 2019-02-25 09:10:29.840000 ||| Write issue summary here1 ||| Write issue description here1 ||| [46.7667, 23.6] ||| Ford ||| project version no. ||| hw used for testing ||| tester name 
-123 ||| 2019-02-25 09:10:38.590000 ||| Write issue summary here2 ||| Write issue description here2 ||| [46.7667, 23.6] ||| Ford ||| project version no. ||| hw used for testing ||| tester name 
