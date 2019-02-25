@@ -151,7 +151,6 @@ class CreateIssueUI:
                                 "issue GPS" : "GPS"
                             }
 
-        
         #create the Top level that will be the create issue main window 
         self.create_issue_window = Toplevel()
         self.create_issue_window.title("Create issue")
@@ -188,12 +187,12 @@ class CreateIssueUI:
         self.issue_GPS_text.insert(END, GPScoord)
         self.issue_GPS_text.grid(row = 3, column = 1)
 
-        #define the button that will save a created issue
-        self.save_close_issue_button = Button(self.create_issue_window, text = "Save", command = lambda: self.save_issue_method(self.issue_dictionary))
+        #define the button that will save a created issue and close the window
+        self.save_close_issue_button = Button(self.create_issue_window, text = "Save and Close", command = lambda: self.save_issue_method(self.issue_dictionary))
         self.save_close_issue_button.grid(row = 5)
 
         #define the button that will discard an issue and close the window
-        self.save_close_issue_button = Button(self.create_issue_window, text = "Close", command = self.create_issue_window.destroy)
+        self.save_close_issue_button = Button(self.create_issue_window, text = "Discard", command = self.create_issue_window.destroy)
         self.save_close_issue_button.grid(row = 5, column = 1)
 
     #This method will save the current data as an new line in the 
